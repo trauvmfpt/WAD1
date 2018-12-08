@@ -39,14 +39,15 @@ namespace WebApplication1
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-           
-            services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                googleOptions.ClientId = Configuration["Authentication:Google:64282656844-966qc55dh37tlcscvhi5bq8656br3hat.apps.googleusercontent.com"];
-                googleOptions.ClientSecret = Configuration["Authentication:Google:AQfjDhMlJv-4Sr5Sx_rUs7ZA"];
-            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,13 +69,13 @@ namespace WebApplication1
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            
         }
     }
 }
